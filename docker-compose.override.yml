@@ -9,7 +9,3 @@ services:
 
 networks:
   lan:
-    drive: bridge
-    ipam:
-      config:
-        - subnet: 127.18.0.1/16

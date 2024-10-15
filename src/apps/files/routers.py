@@ -35,7 +35,7 @@ def CreateFile():
   elif request.method == 'DELETE':
     try:
       row = FilesModel.query.filter_by(id=request.get_json()['id']).first()
-      os.remove(f'static/{row.file_path.split('/')[-1]}')
+      os.remove(f'static/{row.file_path.split("/")[-1]}')
       row.delete()
     except Exception as e:
       print(e)
@@ -46,7 +46,7 @@ def CreateFile():
       row = FilesModel.query.filter_by(id=request.form['id']).first()
       json = request.form.to_dict()
       if len(request.files) > 0:
-        file_name = row.file_path.split('/')[-1]
+        file_name = row.file_path.split("/")[-1]
         file_path = f'static/{file_name}'
         os.remove(file_path)
 

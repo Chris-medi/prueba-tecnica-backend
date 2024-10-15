@@ -8,9 +8,9 @@ ENV PATH="/opt/venv/bin:$PATH"
 RUN apt-get update
 RUN apt-get install gcc libsm-dev ffmpeg libxext-dev -y
 
-COPY requieremts.txt /app
+COPY requirements.txt /app
 
-RUN pip install -r requieremts.txt
+RUN pip install -r requirements.txt
 
 COPY . /app
 
