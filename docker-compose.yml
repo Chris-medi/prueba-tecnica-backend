@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  server: &flask
+    imagen: flask_app:0.1
+    build:
+      context: .
+      dockerfile: dockerfile
+      network: host
+    restart: always
+    environment:
+      FLASK_APP: "main"
+      DEBUG: ${DEBUG}
+      SECRET_KEY: ${SECRET_KEY}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+
+      EMAIL: ${EMAIL}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+
+    command: bash -c "gunicorn asgi:asgi_app --workers=1 --workers-class=uvicorn.workers.UvicornWorker --worker-connections=1 --bind=80 --access-logfile=- && flask init && flask db migrate -m 'Initial migrate' && flask db upgrade' "
+    ports:
+      - 80:80
+    depends_on:
+      - database
+
+  database:
+    image: postgres:16-alpine3.20
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER} # The PostgreSQL user (useful to connect to the database)
+      POSTGRES_PASSWORD: ${DB_PASSWORD} # The PostgreSQL password (useful to connect to the database)
+      POSTGRES_DB: ${DB_NAME} # The PostgreSQL default database (automatically created at first launch)
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+     - db:/var/lib/postgresql/data
+
+  volumes:
+    db:

@@ -1,0 +1,15 @@
+services:
+  database:
+    networks:
+      - lan
+
+  server:
+    networks:
+      - lan
+
+networks:
+  lan:
+    drive: bridge
+    ipam:
+      config:
+        - subnet: 127.18.0.1/16

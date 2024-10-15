@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:16-alpine3.20
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER} # The PostgreSQL user (useful to connect to the database)
+      POSTGRES_PASSWORD: ${DB_PASSWORD} # The PostgreSQL password (useful to connect to the database)
+      POSTGRES_DB: ${DB_NAME} # The PostgreSQL default database (automatically created at first launch)
+    ports:
+      - "5432:5432"
+    volumes:
+     - db:/var/lib/postgresql/data
+volumes:
+  db:
